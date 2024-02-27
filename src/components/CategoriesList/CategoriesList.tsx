@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getProductsFromCategoryAndQuery, getCategories } from '../../services/api';
 
 interface Category {
   id: string;
@@ -11,8 +12,7 @@ function CategoriesList() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://api.mercadolibre.com/sites/MLB/categories');
-        const categoriesData: Category[] = await response.json();
+        const categoriesData = await getCategories();
         setCategoriesList(categoriesData);
       } catch (error) {
         console.error('Erro ao obter categorias:', error);
@@ -24,8 +24,13 @@ function CategoriesList() {
     }
   }, [categoriesList]);
 
-  const handleCategoryClick = (categoryId: string) => {
-    console.log('Categoria clicada:', categoryId);
+  const handleCategoryClick = async (categoryId: string) => {
+    try {
+      const productsData = await getProductsFromCategoryAndQuery(categoryId, '');
+      console.log('Produtos:', productsData);
+    } catch (error) {
+      console.error('Erro ao obter produtos da categoria:', error);
+    }
   };
 
   return (
