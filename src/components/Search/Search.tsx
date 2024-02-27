@@ -1,6 +1,9 @@
+import CategoriesList from '../CategoriesList/CategoriesList';
+
 function Search() {
   return (
     <>
+      <CategoriesList />
       <input
         type="search"
       />
