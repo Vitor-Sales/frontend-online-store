@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getProductsFromCategoryAndQuery, getCategories } from '../../services/api';
 
 interface Category {
@@ -20,6 +20,7 @@ function CategoriesList() {
     };
 
     if (categoriesList.length === 0) {
+      console.log(categoriesList);
       fetchCategories();
     }
   }, [categoriesList]);
@@ -31,6 +32,7 @@ function CategoriesList() {
     } catch (error) {
       console.error('Erro ao obter produtos da categoria:', error);
     }
+    console.log(categoriesList[0].name);
   };
 
   return (
