@@ -12,6 +12,7 @@ interface Product {
   title: string;
   price: number;
   thumbnail: string;
+  quantity: number;
 }
 
 function CategoriesList() {
@@ -46,8 +47,16 @@ function CategoriesList() {
   const handleAddToCart = (product: Product) => {
     const storedCart = localStorage.getItem('cart');
     const currentCart: Product[] = storedCart ? JSON.parse(storedCart) : [];
+    const existingProductIndex = currentCart.findIndex((item) => item.id === product.id);
 
-    currentCart.push(product);
+    if (existingProductIndex !== -1) {
+      currentCart[existingProductIndex]
+        .quantity = (currentCart[existingProductIndex].quantity || 0) + 1;
+    } else {
+      product.quantity = 1;
+      currentCart.push(product);
+    }
+
     localStorage.setItem('cart', JSON.stringify(currentCart));
     setCartItems(currentCart);
   };
