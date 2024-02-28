@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery, getCategories } from '../../services/api';
 
 interface Category {
@@ -34,6 +35,7 @@ function CategoriesList() {
     } catch (error) {
       console.error('Erro ao obter produtos da categoria:', error);
     }
+    console.log(products);
   };
 
   return (
@@ -53,14 +55,24 @@ function CategoriesList() {
 
       <div>
         {
-    Array.isArray(products) && products.map((product, index) => (
-      <div className="cardProducts" key={ index } data-testid="product">
+    Array.isArray(products) && products.map((product) => (
+      <Link
+        key={ product.id }
+        to={ `/product/${product.id}` }
+        state={ {
+          title: product.title,
+          price: product.price,
+          image: product.thumbnail,
+        } }
+        data-testid="product-detail-link"
+      >
+        <div className="cardProducts" data-testid="product">
 
-        <p>{product.title}</p>
-        <p>{product.price}</p>
-        <img src={ product.thumbnail } alt={ product.title } />
-
-      </div>
+          <p>{}</p>
+          <p>{product.price}</p>
+          <img src={ product.thumbnail } alt={ product.title } />
+        </div>
+      </Link>
     ))
 }
       </div>
