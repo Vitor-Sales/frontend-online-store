@@ -8,6 +8,7 @@ interface Category {
 
 function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -28,25 +29,44 @@ function CategoriesList() {
   const handleCategoryClick = async (categoryId: string) => {
     try {
       const productsData = await getProductsFromCategoryAndQuery(categoryId, '');
-      console.log('Produtos:', productsData);
+      // console.log('Produtos:', productsData);
+      setProducts(productsData.results);
     } catch (error) {
       console.error('Erro ao obter produtos da categoria:', error);
     }
-    console.log(categoriesList[0].name);
   };
 
   return (
-    <div>
-      {categoriesList.map((category) => (
-        <button
-          key={ category.id }
-          onClick={ () => handleCategoryClick(category.id) }
-          data-testid="category"
-        >
-          {category.name}
-        </button>
-      ))}
-    </div>
+    <>
+      <div>
+        {categoriesList.map((category) => (
+          <button
+            key={ category.id }
+            onClick={ () => handleCategoryClick(category.id) }
+            data-testid="category"
+          >
+            {category.name}
+          </button>
+        ))}
+
+      </div>
+
+      <div>
+        {
+    Array.isArray(products) && products.map((product, index) => (
+      <div className="cardProducts" key={ index } data-testid="product">
+
+        <p>{product.title}</p>
+        <p>{product.price}</p>
+        <img src={ product.thumbnail } alt={ product.title } />
+
+      </div>
+    ))
+}
+      </div>
+
+    </>
+
   );
 }
 
