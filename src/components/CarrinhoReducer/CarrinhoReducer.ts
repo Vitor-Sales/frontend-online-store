@@ -22,7 +22,7 @@ function carrinhoReducer(state: CarrinhoState, action: CarrinhoAction): Carrinho
     case 'UPDATE_QUANTITY':
       return state.map((item) => (
         item.id === action.payload.id
-          ? { ...item, quantity: action.payload.quantity }
+          ? { ...item, quantity: Math.max(1, item.quantity + action.payload.quantity) }
           : item
       ));
     default:

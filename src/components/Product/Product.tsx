@@ -14,12 +14,19 @@ type ProductType = {
 function Product() {
   const location = useLocation();
   const [productDetail, setProductDetail] = useState<ProductType | null>(null);
-  const { dispatch } = useCarrinho();
+  const { dispatch, carrinho } = useCarrinho();
 
   const handleAddToCart = () => {
     if (productDetail) {
-      dispatch({ type: 'ADD_TO_CART',
-        payload: { ...productDetail, quantity: 1 } as ProductType });
+      const existingItem = carrinho.find((item) => item.id === productDetail.id);
+
+      if (existingItem) {
+        dispatch({ type: 'UPDATE_QUANTITY',
+          payload: { id: productDetail.id, quantity: 1 } });
+      } else {
+        dispatch({ type: 'ADD_TO_CART',
+          payload: { ...productDetail, quantity: 1 } as ProductType });
+      }
     }
   };
 

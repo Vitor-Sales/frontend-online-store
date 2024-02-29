@@ -19,7 +19,7 @@ interface ProductType {
 function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
   const [products, setProducts] = useState<ProductType[]>([]);
-  const { dispatch } = useCarrinho();
+  const { dispatch, carrinho } = useCarrinho();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -46,7 +46,12 @@ function CategoriesList() {
   };
 
   const handleAddToCart = (product: ProductType) => {
-    dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity: 1 } });
+    const existingItem = carrinho.find((item) => item.id === product.id);
+    if (existingItem) {
+      dispatch({ type: 'UPDATE_QUANTITY', payload: { id: product.id, quantity: 1 } });
+    } else {
+      dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity: 1 } });
+    }
   };
 
   return (
