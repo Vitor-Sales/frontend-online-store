@@ -12,7 +12,8 @@ interface ProductType {
 type CarrinhoAction =
   | { type: 'ADD_TO_CART'; payload: ProductType }
   | { type: 'REMOVE_FROM_CART'; payload: { id: string } }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } };
+  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'CLEAR_CART' };
 
 interface CarrinhoContextType {
   carrinho: ProductType[];

@@ -39,8 +39,13 @@ function Carrinho() {
       dispatch({ type: 'REMOVE_FROM_CART', payload: { id: productId } });
     }
   };
+
   const handleBack = () => {
     navigate('/');
+  };
+
+  const handleCheckout = () => {
+    navigate('/Checkout');
   };
 
   return (
@@ -91,6 +96,13 @@ function Carrinho() {
         onClick={ handleBack }
       >
         Voltar
+      </button>
+      <button
+        data-testid="checkout-products"
+        className="checkout-button"
+        onClick={ handleCheckout }
+      >
+        Finalizar Compra
       </button>
     </div>
   );

@@ -9,7 +9,8 @@ interface CarrinhoItem {
   type CarrinhoAction =
     | { type: 'ADD_TO_CART'; payload: CarrinhoItem }
     | { type: 'REMOVE_FROM_CART'; payload: { id: string } }
-    | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } };
+    | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+    | { type: 'CLEAR_CART' };
 
   type CarrinhoState = CarrinhoItem[];
 
@@ -25,6 +26,8 @@ function carrinhoReducer(state: CarrinhoState, action: CarrinhoAction): Carrinho
           ? { ...item, quantity: Math.max(1, item.quantity + action.payload.quantity) }
           : item
       ));
+    case 'CLEAR_CART':
+      return [];
     default:
       return state;
   }

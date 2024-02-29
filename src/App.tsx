@@ -5,6 +5,7 @@ import Carrinho from './components/Carrinho/Carrinho';
 import Layout from './components/Layout';
 import Search from './components/Search/Search';
 import Product from './components/Product/Product';
+import Checkout from './components/Checkout/Checkout';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={ <Search /> } />
             <Route path="/Carrinho" element={ <Carrinho /> } />
             <Route path="/product/:id" element={ <Product /> } />
+            <Route path="/checkout" element={ <Checkout /> } />
           </Route>
         </Routes>
       </CarrinhoProvider>
