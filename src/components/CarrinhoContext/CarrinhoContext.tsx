@@ -22,7 +22,9 @@ interface CarrinhoContextType {
 const CarrinhoContext = createContext<CarrinhoContextType | undefined>(undefined);
 
 export function CarrinhoProvider({ children }: { children: ReactNode }) {
-  const [carrinho, dispatch] = useReducer(carrinhoReducer, []);
+  const carrinhoTernary = localStorage
+    .getItem('cart') ? JSON.parse(localStorage.getItem('cart') as string) : [];
+  const [carrinho, dispatch] = useReducer(carrinhoReducer, carrinhoTernary);
 
   return (
     <CarrinhoContext.Provider value={ { carrinho, dispatch } }>

@@ -13,7 +13,7 @@ type ProductType = {
 
 function Product() {
   const location = useLocation();
-  const [productDetail, setProductDetail] = useState<ProductType | null>(null);
+  const productDetail = location.state as ProductType;
   const { dispatch, carrinho } = useCarrinho();
 
   const handleAddToCart = () => {
@@ -44,10 +44,7 @@ function Product() {
 
       <button
         data-testid="product-detail-add-to-cart"
-        onClick={ () => {
-          setProductDetail(location.state as ProductType);
-          handleAddToCart();
-        } }
+        onClick={ handleAddToCart }
       >
         Adicionar ao Carrinho
       </button>
