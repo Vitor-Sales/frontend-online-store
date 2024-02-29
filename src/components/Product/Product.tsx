@@ -1,38 +1,25 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useCarrinho } from '../CarrinhoContext/CarrinhoContext';
 
 type ProductType = {
   id: string;
   title: string;
   price: number;
   image: string;
-};
-
-interface ProductTypeWithQuantity extends ProductType {
+  thumbnail: string;
   quantity: number;
-}
+};
 
 function Product() {
   const location = useLocation();
   const [productDetail, setProductDetail] = useState<ProductType | null>(null);
+  const { dispatch } = useCarrinho();
 
   const handleAddToCart = () => {
     if (productDetail) {
-      const storedCart = localStorage.getItem('cart');
-      const currentCart: ProductTypeWithQuantity[] = storedCart ? JSON
-        .parse(storedCart) : [];
-      const existingProductIndex = currentCart
-        .findIndex((item) => item.id === productDetail.id);
-
-      if (existingProductIndex !== -1) {
-        const updatedCart = [...currentCart];
-        updatedCart[existingProductIndex]
-          .quantity = (updatedCart[existingProductIndex].quantity || 0) + 1;
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-      } else {
-        const updatedCart = [...currentCart, { ...productDetail, quantity: 1 }];
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-      }
+      dispatch({ type: 'ADD_TO_CART',
+        payload: { ...productDetail, quantity: 1 } as ProductType });
     }
   };
 

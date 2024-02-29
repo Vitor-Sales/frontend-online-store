@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery, getCategories } from '../../services/api';
+import { useCarrinho } from '../CarrinhoContext/CarrinhoContext';
 
 interface Category {
   id: string;
@@ -18,7 +19,7 @@ interface ProductType {
 function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [cartItems, setCartItems] = useState<ProductType[]>([]);
+  const { dispatch } = useCarrinho();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -45,20 +46,7 @@ function CategoriesList() {
   };
 
   const handleAddToCart = (product: ProductType) => {
-    const storedCart = localStorage.getItem('cart');
-    const currentCart: ProductType[] = storedCart ? JSON.parse(storedCart) : [];
-    const existingProductIndex = currentCart.findIndex((item) => item.id === product.id);
-
-    if (existingProductIndex !== -1) {
-      currentCart[existingProductIndex]
-        .quantity = (currentCart[existingProductIndex].quantity || 0) + 1;
-    } else {
-      product.quantity = 1;
-      currentCart.push(product);
-    }
-
-    localStorage.setItem('cart', JSON.stringify(currentCart));
-    setCartItems(currentCart);
+    dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity: 1 } });
   };
 
   return (
@@ -76,8 +64,7 @@ function CategoriesList() {
       </div>
 
       <div>
-        {
-        Array.isArray(products) && products.map((product) => (
+        {Array.isArray(products) && products.map((product) => (
           <div key={ product.id } className="cardProducts" data-testid="product">
             <Link
               to={ `/product/${product.id}` }
@@ -99,8 +86,7 @@ function CategoriesList() {
               Adicionar ao Carrinho
             </button>
           </div>
-        ))
-        }
+        ))}
       </div>
     </>
   );
