@@ -3,7 +3,7 @@ import { IoMdAddCircle, IoIosRemoveCircle } from 'react-icons/io';
 import { CiCircleRemove } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 
-type Product = {
+type ProductType = {
   id: string;
   title: string;
   price: number;
@@ -11,14 +11,14 @@ type Product = {
 };
 
 function Carrinho() {
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [cartItems, setCartItems] = useState<ProductType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedCart = localStorage.getItem('cart');
 
     if (storedCart) {
-      setCartItems(JSON.parse(storedCart) as Product[]);
+      setCartItems(JSON.parse(storedCart) as ProductType[]);
     }
   }, []);
 
@@ -37,7 +37,7 @@ function Carrinho() {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: ProductType) => {
     const existingProductIndex = cartItems.findIndex((item) => item.id === product.id);
 
     if (existingProductIndex !== -1) {
@@ -77,7 +77,7 @@ function Carrinho() {
           <ul>
             {cartItems.map((item) => (
               <li key={ item.id }>
-                <p data-testid="shopping-cart-product-name">{item.title}</p>
+                <h2 data-testid="shopping-cart-product-name">{item.title}</h2>
                 <p>
                   R$
                   {item.price}
@@ -121,4 +121,3 @@ function Carrinho() {
 }
 
 export default Carrinho;
-//

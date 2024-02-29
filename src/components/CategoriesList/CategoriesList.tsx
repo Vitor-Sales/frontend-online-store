@@ -7,7 +7,7 @@ interface Category {
   name: string;
 }
 
-interface Product {
+interface ProductType {
   id: string;
   title: string;
   price: number;
@@ -17,8 +17,8 @@ interface Product {
 
 function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [cartItems, setCartItems] = useState<ProductType[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,9 +44,9 @@ function CategoriesList() {
     }
   };
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: ProductType) => {
     const storedCart = localStorage.getItem('cart');
-    const currentCart: Product[] = storedCart ? JSON.parse(storedCart) : [];
+    const currentCart: ProductType[] = storedCart ? JSON.parse(storedCart) : [];
     const existingProductIndex = currentCart.findIndex((item) => item.id === product.id);
 
     if (existingProductIndex !== -1) {
