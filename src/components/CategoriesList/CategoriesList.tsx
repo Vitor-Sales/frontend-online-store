@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery, getCategories } from '../../services/api';
+import { useCarrinho } from '../CarrinhoContext/CarrinhoContext';
 
 interface Category {
   id: string;
   name: string;
 }
 
-interface Product {
+interface ProductType {
   id: string;
   title: string;
   price: number;
@@ -17,8 +18,8 @@ interface Product {
 
 function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const { dispatch, carrinho } = useCarrinho();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,21 +45,13 @@ function CategoriesList() {
     }
   };
 
-  const handleAddToCart = (product: Product) => {
-    const storedCart = localStorage.getItem('cart');
-    const currentCart: Product[] = storedCart ? JSON.parse(storedCart) : [];
-    const existingProductIndex = currentCart.findIndex((item) => item.id === product.id);
-
-    if (existingProductIndex !== -1) {
-      currentCart[existingProductIndex]
-        .quantity = (currentCart[existingProductIndex].quantity || 0) + 1;
+  const handleAddToCart = (product: ProductType) => {
+    const existingItem = carrinho.find((item) => item.id === product.id);
+    if (existingItem) {
+      dispatch({ type: 'UPDATE_QUANTITY', payload: { id: product.id, quantity: 1 } });
     } else {
-      product.quantity = 1;
-      currentCart.push(product);
+      dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity: 1 } });
     }
-
-    localStorage.setItem('cart', JSON.stringify(currentCart));
-    setCartItems(currentCart);
   };
 
   return (
@@ -76,8 +69,7 @@ function CategoriesList() {
       </div>
 
       <div>
-        {
-        Array.isArray(products) && products.map((product) => (
+        {Array.isArray(products) && products.map((product) => (
           <div key={ product.id } className="cardProducts" data-testid="product">
             <Link
               to={ `/product/${product.id}` }
@@ -99,8 +91,7 @@ function CategoriesList() {
               Adicionar ao Carrinho
             </button>
           </div>
-        ))
-        }
+        ))}
       </div>
     </>
   );

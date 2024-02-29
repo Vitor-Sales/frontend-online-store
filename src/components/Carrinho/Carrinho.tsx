@@ -1,86 +1,62 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { IoMdAddCircle, IoIosRemoveCircle } from 'react-icons/io';
 import { CiCircleRemove } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
+import { useCarrinho } from '../CarrinhoContext/CarrinhoContext';
 
-type Product = {
+interface ProductType {
   id: string;
   title: string;
   price: number;
+  thumbnail: string;
   quantity: number;
-};
+}
 
 function Carrinho() {
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const { carrinho, dispatch } = useCarrinho();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
-
-    if (storedCart) {
-      setCartItems(JSON.parse(storedCart) as Product[]);
-    }
-  }, []);
+    localStorage.setItem('cart', JSON.stringify(carrinho));
+  }, [carrinho]);
 
   const handleRemoveQuantity = (productId: string) => {
-    const updatedCart = cartItems.map((item) => {
-      if (item.id === productId && item.quantity && item.quantity > 1) {
-        return {
-          ...item,
-          quantity: item.quantity - 1,
-        };
-      }
-      return item;
-    });
-
-    setCartItems(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { id: productId, quantity: -1 } });
   };
 
-  const handleAddToCart = (product: Product) => {
-    const existingProductIndex = cartItems.findIndex((item) => item.id === product.id);
+  const handleAddToCart = (product: ProductType) => {
+    const existingItem = carrinho.find((item) => item.id === product.id);
 
-    if (existingProductIndex !== -1) {
-      const updatedCart = [...cartItems];
-      updatedCart[existingProductIndex]
-        .quantity = (updatedCart[existingProductIndex].quantity || 0) + 1;
-
-      setCartItems(updatedCart);
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
+    if (existingItem) {
+      dispatch({ type: 'UPDATE_QUANTITY', payload: { id: product.id, quantity: 1 } });
     } else {
-      const updatedCart = [...cartItems, { ...product, quantity: 1 }];
-
-      setCartItems(updatedCart);
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity: 1 } });
     }
   };
 
   const handleRemoveProduct = (productId: string) => {
-    const updatedCart = cartItems.filter((item) => item.id !== productId);
-    setCartItems(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    if (carrinho.length > 0) {
+      dispatch({ type: 'REMOVE_FROM_CART', payload: { id: productId } });
+    }
   };
-
   const handleBack = () => {
     navigate('/');
   };
 
   return (
     <div>
-      {cartItems.length === 0 ? (
-        <p data-testid="shopping-cart-empty-message">
-          Seu carrinho está vazio
-        </p>
+      {carrinho.length === 0 ? (
+        <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
       ) : (
         <div>
           <h2>Seu Carrinho</h2>
           <ul>
-            {cartItems.map((item) => (
+            {carrinho.map((item) => (
               <li key={ item.id }>
                 <p data-testid="shopping-cart-product-name">{item.title}</p>
                 <p>
                   R$
-                  {item.price}
+                  { item.price }
                 </p>
                 <p data-testid="shopping-cart-product-quantity">{item.quantity}</p>
                 <button
