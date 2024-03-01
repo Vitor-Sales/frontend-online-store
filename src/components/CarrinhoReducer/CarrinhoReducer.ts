@@ -1,4 +1,4 @@
-import { ProductType } from '../Carrinho/Carrinho';
+import { type ProductType } from '../Carrinho/Carrinho';
 
 interface CarrinhoItem {
   id: string;
