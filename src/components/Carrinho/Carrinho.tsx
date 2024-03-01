@@ -4,7 +4,7 @@ import { CiCircleRemove } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../CarrinhoContext/CarrinhoContext';
 
-interface ProductType {
+export interface ProductType {
   id: string;
   title: string;
   price: number;
@@ -17,7 +17,8 @@ function Carrinho() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(carrinho));
+    const cart = localStorage.getItem('cart') || '[]';
+    const cartParse = JSON.parse(cart);
   }, [carrinho]);
 
   const handleRemoveQuantity = (productId: string) => {
@@ -39,8 +40,13 @@ function Carrinho() {
       dispatch({ type: 'REMOVE_FROM_CART', payload: { id: productId } });
     }
   };
+
   const handleBack = () => {
     navigate('/');
+  };
+
+  const handleCheckout = () => {
+    navigate('/Checkout');
   };
 
   return (
@@ -91,6 +97,13 @@ function Carrinho() {
         onClick={ handleBack }
       >
         Voltar
+      </button>
+      <button
+        data-testid="checkout-products"
+        className="checkout-button"
+        onClick={ handleCheckout }
+      >
+        Finalizar Compra
       </button>
     </div>
   );
