@@ -10,6 +10,7 @@ export interface ProductType {
   price: number;
   thumbnail: string;
   quantity: number;
+  available_quantity: number;
 }
 
 function Carrinho() {
@@ -74,6 +75,7 @@ function Carrinho() {
                 </button>
                 <button
                   type="button"
+                  disabled={ item.quantity === item.available_quantity }
                   data-testid="product-increase-quantity"
                   onClick={ () => handleAddToCart(item) }
                 >

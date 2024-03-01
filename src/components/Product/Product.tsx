@@ -9,6 +9,7 @@ type ProductType = {
   image: string;
   thumbnail: string;
   quantity: number;
+  available_quantity: number;
 };
 
 function Product() {

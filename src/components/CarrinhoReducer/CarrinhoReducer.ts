@@ -6,6 +6,7 @@ interface CarrinhoItem {
   price: number;
   thumbnail: string;
   quantity: number;
+  available_quantity: number;
 }
 
   type CarrinhoAction =
