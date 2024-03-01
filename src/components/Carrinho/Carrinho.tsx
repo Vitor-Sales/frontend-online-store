@@ -51,7 +51,7 @@ function Carrinho() {
   return (
     <div>
       {carrinho.length === 0 ? (
-        <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
+        <h1 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h1>
       ) : (
         <div>
           <h2>Seu Carrinho</h2>

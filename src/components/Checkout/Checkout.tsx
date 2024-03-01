@@ -6,6 +6,7 @@ function Checkout() {
   const { carrinho } = useCarrinho();
   const navigate = useNavigate();
   const { dispatch } = useCarrinho();
+  const [formValid, setFormValid] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -39,19 +40,13 @@ function Checkout() {
     && paymentMethodValid;
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (event: any) => {
     const isFormValid = validationForm();
+    event.preventDefault();
 
     if (!isFormValid) {
-      const errorMessageElement = document.createElement('div');
-      errorMessageElement.textContent = 'Campos inválidos';
-      errorMessageElement.setAttribute('data-testid', 'error-msg');
-      document.body.appendChild(errorMessageElement);
+      setFormValid(true);
     } else {
-      const errorMessageElement = document.querySelector('[data-testid="error-msg"]');
-      if (errorMessageElement) {
-        errorMessageElement.remove();
-      }
       dispatch({ type: 'CLEAR_CART' });
       navigate('/');
     }
@@ -172,6 +167,7 @@ function Checkout() {
           {' '}
           Elo
         </label>
+
         <button
           type="submit"
           data-testid="checkout-btn"
@@ -180,6 +176,7 @@ function Checkout() {
           Finalizar Compra
         </button>
       </form>
+      {formValid && <div data-testid="error-msg">Campos inválidos</div>}
     </div>
   );
 }
