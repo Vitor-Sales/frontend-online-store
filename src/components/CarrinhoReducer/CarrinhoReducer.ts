@@ -1,3 +1,5 @@
+import { ProductType } from '../Carrinho/Carrinho';
+
 interface CarrinhoItem {
   id: string;
   title: string;
@@ -16,10 +18,18 @@ interface CarrinhoItem {
 
 function carrinhoReducer(state: CarrinhoState, action: CarrinhoAction): CarrinhoState {
   switch (action.type) {
-    case 'ADD_TO_CART':
+    case 'ADD_TO_CART': {
+      localStorage.setItem('cart', JSON.stringify([...state, action.payload]));
       return [...state, action.payload];
-    case 'REMOVE_FROM_CART':
+    }
+    case 'REMOVE_FROM_CART': {
+      const cart = localStorage.getItem('cart') || '[]';
+      const cartParse = JSON.parse(cart);
+      const filtredCart = cartParse
+        .filter((item: ProductType) => item.id !== action.payload.id);
+      localStorage.setItem('cart', JSON.stringify(filtredCart));
       return state.filter((item) => item.id !== action.payload.id);
+    }
     case 'UPDATE_QUANTITY':
       return state.map((item) => (
         item.id === action.payload.id

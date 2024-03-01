@@ -4,7 +4,7 @@ import { CiCircleRemove } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../CarrinhoContext/CarrinhoContext';
 
-interface ProductType {
+export interface ProductType {
   id: string;
   title: string;
   price: number;
@@ -17,7 +17,8 @@ function Carrinho() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(carrinho));
+    const cart = localStorage.getItem('cart') || '[]';
+    const cartParse = JSON.parse(cart);
   }, [carrinho]);
 
   const handleRemoveQuantity = (productId: string) => {
@@ -51,7 +52,7 @@ function Carrinho() {
   return (
     <div>
       {carrinho.length === 0 ? (
-        <h1 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h1>
+        <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
       ) : (
         <div>
           <h2>Seu Carrinho</h2>

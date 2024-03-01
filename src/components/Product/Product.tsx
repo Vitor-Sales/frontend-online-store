@@ -28,6 +28,7 @@ function Product() {
           payload: { ...productDetail, quantity: 1 } as ProductType });
       }
     }
+    localStorage.setItem('cart', JSON.stringify(carrinho));
   };
 
   if (!location.state) {

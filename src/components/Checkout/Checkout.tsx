@@ -43,11 +43,13 @@ function Checkout() {
   const handleFormSubmit = (event: any) => {
     const isFormValid = validationForm();
     event.preventDefault();
+    console.log(isFormValid);
 
     if (!isFormValid) {
       setFormValid(true);
     } else {
       dispatch({ type: 'CLEAR_CART' });
+      localStorage.setItem('cart', JSON.stringify([]));
       navigate('/');
     }
   };
@@ -78,7 +80,7 @@ function Checkout() {
           id="fullName"
           placeholder="Nome Completo"
           value={ formData.fullName }
-          onChange={ handleChange }
+          onChange={ (event) => handleChange(event) }
         />
         <input
           type="text"
@@ -86,7 +88,7 @@ function Checkout() {
           name="email"
           placeholder="E-mail"
           value={ formData.email }
-          onChange={ handleChange }
+          onChange={ (event) => handleChange(event) }
         />
         <input
           type="text"
@@ -94,7 +96,7 @@ function Checkout() {
           name="cpf"
           placeholder="CPF"
           value={ formData.cpf }
-          onChange={ handleChange }
+          onChange={ (event) => handleChange(event) }
         />
         <input
           type="text"
@@ -102,7 +104,7 @@ function Checkout() {
           name="phone"
           placeholder="Telefone"
           value={ formData.phone }
-          onChange={ handleChange }
+          onChange={ (event) => handleChange(event) }
         />
         <input
           type="text"
@@ -110,7 +112,7 @@ function Checkout() {
           name="cep"
           placeholder="Cep"
           value={ formData.cep }
-          onChange={ handleChange }
+          onChange={ (event) => handleChange(event) }
         />
         <input
           type="text"
@@ -118,7 +120,7 @@ function Checkout() {
           name="address"
           placeholder="Endereço"
           value={ formData.address }
-          onChange={ handleChange }
+          onChange={ (event) => handleChange(event) }
         />
         <label>
           Forma de Pagamento:
@@ -128,7 +130,7 @@ function Checkout() {
             name="paymentMethod"
             value="boleto"
             checked={ formData.paymentMethod === 'boleto' }
-            onChange={ handleChange }
+            onChange={ (event) => handleChange(event) }
             required
           />
           {' '}
@@ -139,7 +141,7 @@ function Checkout() {
             name="paymentMethod"
             value="visa"
             checked={ formData.paymentMethod === 'visa' }
-            onChange={ handleChange }
+            onChange={ (event) => handleChange(event) }
             required
           />
           {' '}
@@ -150,7 +152,7 @@ function Checkout() {
             name="paymentMethod"
             value="masterCard"
             checked={ formData.paymentMethod === 'masterCard' }
-            onChange={ handleChange }
+            onChange={ (event) => handleChange(event) }
             required
           />
           {' '}
@@ -161,17 +163,16 @@ function Checkout() {
             name="paymentMethod"
             value="elo"
             checked={ formData.paymentMethod === 'elo' }
-            onChange={ handleChange }
+            onChange={ (event) => handleChange(event) }
             required
           />
           {' '}
           Elo
         </label>
-
         <button
           type="submit"
           data-testid="checkout-btn"
-          onClick={ handleFormSubmit }
+          onClick={ (event) => handleFormSubmit(event) }
         >
           Finalizar Compra
         </button>
